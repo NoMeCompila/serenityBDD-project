@@ -1,9 +1,11 @@
-package net.serenitybdd.demos.todos.browserstack.tests;
+package net.serenitybdd.demos.todos.saucelabsdemo.tests;
 
 import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.demos.todos.browserstack.model.DashboardInformation;
 import net.serenitybdd.demos.todos.browserstack.questions.Dashboard;
 import net.serenitybdd.demos.todos.browserstack.tasks.LoginToBstack;
+import net.serenitybdd.demos.todos.saucelabsdemo.tasks.AccessToSauceDemo;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -18,31 +20,29 @@ import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
 import static org.hamcrest.Matchers.equalTo;
 
-@ExtendWith(SerenityJUnit5Extension.class)
-public class ScreenPlayTest {
+import static net.serenitybdd.screenplay.GivenWhenThen.givenThat;
+import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 
-    private Actor demoUser = Actor.named("Demo User");
+@ExtendWith(SerenityJUnit5Extension.class)
+public class TestSauceDemo {
+    private Actor demoUser = Actor.named("standard_user");
 
     @Managed
     private WebDriver hisBrowser;
 
     @BeforeEach
-    public void demoUserCanBrowseTheWeb() {
+    public void demoUserCanBrowseTheWeb(){
         demoUser.can(BrowseTheWeb.with(hisBrowser));
     }
 
-
     @Test
+    @WithTag("sauceDemo")
     public void browseTheWebAsDemoUser() {
-        demoUser.attemptsTo(Open.url("https://bstackdemo.com/signin"));
-        givenThat(demoUser).attemptsTo(LoginToBstack.withCredentials("demouser", "testingisfun99"));
+        demoUser.attemptsTo(Open.browserOn().thePageNamed("pages.sauceDemo"));
+        givenThat(demoUser).attemptsTo(AccessToSauceDemo.withCredentials("standard_user", "secret_sauce"));
 
-        then(demoUser).should(
-                seeThat(Dashboard.information(),
-                        displays("title", equalTo("StackDemo")),
-                        displays("bag", equalTo("0")),
-                        displays("userLogued", equalTo("demouser"))
-                            )
-                );
+        then(demoUser).should(seeThat(Dashboard.information(),
+                displays("title", equalTo("Swag Labs")))
+        );
     }
 }

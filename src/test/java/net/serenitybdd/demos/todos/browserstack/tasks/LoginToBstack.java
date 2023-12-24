@@ -14,8 +14,6 @@ public class LoginToBstack implements Task {
 
     private String password;
 
-
-
     @Override
     public <T extends Actor> void performAs(T actor) {
         actor.attemptsTo(Enter.theValue(username).into(BStasckLoginPage.USERNAME).thenHit(Keys.TAB));
@@ -31,5 +29,4 @@ public class LoginToBstack implements Task {
     public static Task withCredentials(String username, String password){
         return Instrumented.instanceOf(LoginToBstack.class).withProperties(username, password);
     }
-
 }
