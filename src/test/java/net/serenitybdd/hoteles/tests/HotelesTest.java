@@ -2,6 +2,8 @@ package net.serenitybdd.hoteles.tests;
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.demos.todos.browserstack.questions.Dashboard;
 import net.serenitybdd.hoteles.pages.HotelesHome;
+import net.serenitybdd.hoteles.questions.HotelesQuestions;
+import net.serenitybdd.hoteles.tasks.BookingDataTask;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -15,15 +17,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+
+import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
 import java.security.PrivilegedAction;
-import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
-import static net.serenitybdd.screenplay.GivenWhenThen.then;
+
 import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 import static net.serenitybdd.screenplay.questions.targets.TheTarget.textOf;
 import static org.hamcrest.Matchers.equalTo;
-
 
 @RunWith(SerenityRunner.class)
 public class HotelesTest {
@@ -34,9 +36,6 @@ public class HotelesTest {
         return hotelesHome;
     }
 
-    //ul//li[@data-index='0']
-    ////button[@data-stid='destination_form_field-menu-trigger']
-    ////input[@id='destination_form_field']
     @Managed
     WebDriver browser;
 
@@ -53,26 +52,13 @@ public class HotelesTest {
                 .browserOn()
                 .thePageNamed("pages.hoteles"));
 
-        //then(actor).should(seeThat(textOf(getHotelesHome().getTitulo()), equalTo("¿A dónde vas?")));
-
-        actor.attemptsTo(Click
-                .on(getHotelesHome().getBotonDestino()));
-
-        actor.attemptsTo(Enter
-                .theValue("San Carlos de Bariloche, Río Negro, Argentina")
-                .into(getHotelesHome().getTextoDestino())
-                .thenHit(Keys.ENTER));
-
-//        actor.attemptsTo(Enter
-//                .theValue("San Carlos de Bariloche, Río Negro, Argentina")
-//                .into(TXT_DESTINO)
-//                .thenHit(Keys.TAB)
-//                .thenHit(Keys.TAB)
-//                .thenHit(Keys.ENTER));
+        then(actor)
+                .should(seeThat(HotelesQuestions.information(),
+                        displays("titulo",equalTo("¿A dónde vas?"))));
 
 
-
-        //actor.attemptsTo(Click.on(FIRST_OPTION));
-        //Thread.sleep(3000);
+        givenThat(actor)
+                .attemptsTo(BookingDataTask
+                        .withData("San Carlos de Bariloche, Río Negro, Argentina"));
     }
 }
