@@ -1,19 +1,17 @@
-package net.serenitybdd.demos.todos.saucelabsdemo.tests;
+package net.serenitybdd.demos.todos.saucelabsdemo.steps;
 
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.annotations.WithTag;
-import net.serenitybdd.demos.todos.browserstack.model.DashboardInformation;
 import net.serenitybdd.demos.todos.browserstack.questions.Dashboard;
-import net.serenitybdd.demos.todos.browserstack.tasks.LoginToBstack;
 import net.serenitybdd.demos.todos.saucelabsdemo.tasks.AccessToSauceDemo;
-import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Open;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
@@ -23,26 +21,24 @@ import static org.hamcrest.Matchers.equalTo;
 import static net.serenitybdd.screenplay.GivenWhenThen.givenThat;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 
-@ExtendWith(SerenityJUnit5Extension.class)
-public class TestSauceDemo {
+
+public class CucumberSauceDemo {
     private Actor demoUser = Actor.named("standard_user");
 
     @Managed
     private WebDriver hisBrowser;
 
-    @BeforeEach
-    public void demoUserCanBrowseTheWeb(){
+    @Given("dado que ingreso a la web de sauce demo")
+    public void dadoQueIngresoALaWebDeSauceDemo() {
         demoUser.can(BrowseTheWeb.with(hisBrowser));
+        givenThat(demoUser).attemptsTo(Open.browserOn().thePageNamed("pages.sauceDemo"));
     }
-
-    @Test
-    @WithTag("sauceDemo")
-    public void browseTheWebAsDemoUser() {
-        demoUser.attemptsTo(Open.browserOn().thePageNamed("pages.sauceDemo"));
-        givenThat(demoUser).attemptsTo(AccessToSauceDemo.withCredentials("standard_user", "secret_sauce"));
-
-        then(demoUser).should(seeThat(Dashboard.information(),
-                displays("title", equalTo("Swag Labs")))
-        );
+    @When("ingreso las credenciales y presiono el boton login")
+    public void ingresoLasCredencialesYPresionoElBotonLogin() {
+        when(demoUser).attemptsTo(AccessToSauceDemo.withCredentials("standard_user", "secret_sauce"));
+    }
+    @Then("verifico el titulo de la web")
+    public void verificoElTituloDeLaWeb() {
+        then(demoUser).should(seeThat(Dashboard.information(), displays("title", equalTo("Swag Labs"))));
     }
 }
