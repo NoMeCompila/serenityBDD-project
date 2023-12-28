@@ -21,9 +21,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static net.serenitybdd.screenplay.GivenWhenThen.givenThat;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 
-
+@WithTag("sauce")
 public class CucumberSauceDemo {
-    private Actor demoUser = Actor.named("standard_user");
+    private Actor demoUser = Actor.named("demmo user");
 
     @Managed
     private WebDriver hisBrowser;
