@@ -19,7 +19,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static net.serenitybdd.screenplay.GivenWhenThen.givenThat;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 
-@WithTag("sauce")
 public class CucumberSauceDemo {
     private Actor demoUser = Actor.named("demmo user");
 
@@ -29,14 +28,19 @@ public class CucumberSauceDemo {
     @Given("^dado que ingreso a la web de sauce demo$")
     public void dadoQueIngresoALaWebDeSauceDemo() {
         demoUser.can(BrowseTheWeb.with(hisBrowser));
-        givenThat(demoUser).attemptsTo(Open.browserOn().thePageNamed("pages.sauceDemo"));
+        givenThat(demoUser)
+                .attemptsTo(Open.browserOn()
+                        .thePageNamed("pages.sauceDemo"));
     }
     @When("^ingreso usuario (.*) contrasenia (.*) y presiono el boton login$")
     public void ingresoLasCredencialesYPresionoElBotonLogin(String user, String pass) {
-        when(demoUser).attemptsTo(AccessToSauceDemo.withCredentials(user, pass));
+        when(demoUser)
+                .attemptsTo(AccessToSauceDemo.withCredentials(user, pass));
     }
     @Then("^verifico el titulo de la web$")
     public void verificoElTituloDeLaWeb() {
-        then(demoUser).should(seeThat(Dashboard.information(), displays("title", equalTo("Swag Labs"))));
+        then(demoUser)
+                .should(seeThat(Dashboard.information(),
+                        displays("title", equalTo("Swag Labs"))));
     }
 }
