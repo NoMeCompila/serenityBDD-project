@@ -26,16 +26,16 @@ public class CucumberSauceDemo {
     @Managed
     private WebDriver hisBrowser;
 
-    @Given("dado que ingreso a la web de sauce demo")
+    @Given("^dado que ingreso a la web de sauce demo$")
     public void dadoQueIngresoALaWebDeSauceDemo() {
         demoUser.can(BrowseTheWeb.with(hisBrowser));
         givenThat(demoUser).attemptsTo(Open.browserOn().thePageNamed("pages.sauceDemo"));
     }
-    @When("ingreso las credenciales y presiono el boton login")
-    public void ingresoLasCredencialesYPresionoElBotonLogin() {
-        when(demoUser).attemptsTo(AccessToSauceDemo.withCredentials("standard_user", "secret_sauce"));
+    @When("^ingreso usuario (.*) contrasenia (.*) y presiono el boton login$")
+    public void ingresoLasCredencialesYPresionoElBotonLogin(String user, String pass) {
+        when(demoUser).attemptsTo(AccessToSauceDemo.withCredentials(user, pass));
     }
-    @Then("verifico el titulo de la web")
+    @Then("^verifico el titulo de la web$")
     public void verificoElTituloDeLaWeb() {
         then(demoUser).should(seeThat(Dashboard.information(), displays("title", equalTo("Swag Labs"))));
     }
