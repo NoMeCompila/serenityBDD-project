@@ -1,5 +1,6 @@
 Feature: Login to SauceDemo
 
+  @sauceDemo
   Scenario: Ingresar correctamente al sistema
     Given dado que ingreso a la web de sauce demo
     When ingreso las credenciales y presiono el boton login
